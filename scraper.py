@@ -26,6 +26,13 @@ tags = {
         "purchased":["div", "product-review-pz", "em"]
 } 
 
+#funkcja do usuwania znaków formatujących
+def remove_whitespaces(string):
+    try:
+        return string.replace("/n", ", ").replace("/r", ", ")
+    except AttributeError:
+        pass
+
 #adres URL przykładowej strony z opiniami
 url_prefix = "https://www.ceneo.pl"
 product_id = input("Podaj kod produktu: ")
@@ -41,7 +48,7 @@ while URL:
     page_tree = BeautifulSoup(page_respons.text, 'html.parser')
 
     #wydobycie z koodu html strony fragmentów odpowiadającycm poszczególnym opiniom
-    opinions = page_tree.find_all("li", "review-box")
+    opinions = page_tree.find_all("li", "js_product-review")
 
     #wydobycie składowych dla pojedynczej opinii
     for opinion in opinions:
@@ -49,7 +56,12 @@ while URL:
                     for key, args in tags.items()} 
 
         features["purchased"]=(features["purchased"]=="Opinia potwierdzona zakupem")
-        features["opinion_id"]= opinion["data-entry-id"]
+        features["opinion_id"]= int(opinion["data-entry-id"])
+        features["useful"]=int(features["useful"])
+        features["useless"]=int(features["useless"])
+        features["content"]=remove_whitespaces(features["content"])
+        features["pros"]=remove_whitespaces(features["pros"])
+        features["cons"]=remove_whitespaces(features["cons"])
         dates = opinion.find("span", "review-time").find_all("time")
         features["review_date"] = dates.pop(0)["datetime"]
         try:
@@ -65,7 +77,7 @@ while URL:
         URL = None 
     print(URL)
 
-with open(product_id+".json", "w", encoding = "utf-8") as fp:
+with open("./opinions_json/"+product_id+'.json', "w", encoding = "utf-8") as fp:
     json.dump(opinions_list, fp, ensure_ascii=False, indent=4, separators=(',', ': '))
 
 print(len(opinions_list))
