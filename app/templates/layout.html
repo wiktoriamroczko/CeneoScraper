@@ -1,0 +1,33 @@
+<!doctype html>
+<html>
+  <head>
+      <title>Ceneo Scraper</title>
+      <link rel="stylesheet" href="szsz.css" type="text/css" />
+  </head>
+  <body>
+    <div class="header">
+        <h1>Ceneo Scraper</h1>
+    </div>
+
+    <nav class="cont">
+      <div>
+        <ul> 
+          <li><a class="nav" href="./"> Strona Główna</a></li>
+          <li><a class="nav" href="./extract.html"> Ekstrakcja opinii</a></li>
+          <li><a class="nav" href="./products"> Lista produktów</a></li>
+          <li><a class="nav" href="./about.html"> O projekcie</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <div class="container" style="padding-top: 50px; padding-bottom: 100px;">
+      <div class="row">
+        <div class="col-md-12 col-sm-12">
+          {% block body %}
+            <p>Ala ma kota</p>
+          {% endblock %}
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
